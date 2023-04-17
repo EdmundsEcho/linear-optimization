@@ -1,0 +1,20 @@
+[package]
+name = "propensity-bin"
+version = "0.1.0"
+authors = ["Edmund Cape <edmund.cape@gmail.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "propensity_bin"
+path = "src/main.rs"
+
+[dependencies]
+color-eyre = "0.6.2"
+tracing = "0.1.37"
+tracing-subscriber = "0.3.16"
+propensity-score = { path = "../lib" }
+
+[profile.release]
+debug = true

@@ -1,0 +1,31 @@
+[package]
+name = "propensity-score"
+version = "0.1.0"
+authors = ["Edmund Cape <edmund.cape@gmail.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "propensity_score"
+path = "src/lib.rs"
+
+[dependencies]
+color-eyre = "0.6.2"
+const_format = "0.2.30"
+csv = "1.2.1"
+nalgebra = "0.32.2"
+num-traits = "0.2.15"
+rand = "0.8.5"
+tracing = "0.1.37"
+
+[dependencies.argmin]
+version= "0.8.1"
+features= ["rayon", "slog-logger"]
+
+[dependencies.argmin-math]
+version = "0.3.0"
+features = ["nalgebra_latest-serde", "nalgebra_latest"]
+
+[profile.release]
+debug = true
