@@ -1,3 +1,6 @@
+///
+/// Configuration for the optimization process
+///
 pub struct CfgBuilder {
     max_iters: u64,
     logging: bool,

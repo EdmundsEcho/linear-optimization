@@ -64,7 +64,7 @@ impl<'a> Objective {
         let x_dmatrix = DMatrix::from_row_slice(rows, x_cols, &x);
         Ok(Objective::new(x_dmatrix, y.into()))
     }
-    // alias that points to trait
+    /// alias that points to trait
     pub fn from_matrix(matrix: DMatrix<f64>) -> Result<Self> {
         Ok(matrix.into())
     }
@@ -101,8 +101,8 @@ pub struct Findings<'a> {
     pub objective: &'a Objective,
 }
 impl<'a> Findings<'a> {
-    pub fn report(&self) -> Result<()> {
-        let message = format!(
+    pub fn report(&self) -> Result<String> {
+        let report = format!(
             r#"
 -----------------------------------
 features: {}
@@ -119,8 +119,7 @@ AUC score: {}
             auc_score(&self.objective.y, &self.predict(true))?,
         );
 
-        event!(Level::INFO, "{}", message);
-        Ok(())
+        Ok(report)
     }
     /*
     pub fn coefficients(&self) -> &DVector<f64> {
