@@ -1,13 +1,20 @@
 use color_eyre::eyre::{eyre, Report, Result};
 use csv;
-use nalgebra::base::{DMatrix, Scalar};
+use nalgebra::base::Scalar;
 
 use std::path::Path;
 use std::str::FromStr;
 
-/// Returns DMatrix with target in the first position, and the
+///
+/// Returns dynamic matrix with target in the first position, and the
 /// placeholder for intercept in the last position.
-pub fn from_csv<P: AsRef<Path>, N>(path: P, with_headers: bool) -> Result<DMatrix<N>>
+///
+/// todo: separate the target Y from the rest of X.
+/// ... generate a skip-like iterator on records that ignores the y value
+/// specified in the header.
+///
+/// pub fn to_dense_matrix(df: &DataFrame) -> Result<(Vec<f64>, usize)> {
+pub fn from_csv<P: AsRef<Path>, N>(path: P, with_headers: bool) -> Result<(Vec<N>, usize)>
 where
     N: FromStr + Scalar,
     <N as FromStr>::Err: Send + Sync,
@@ -43,8 +50,5 @@ where
     let feature_count = reader.headers()?.len() + 1;
     let num_records = staged_records.len() / feature_count;
 
-    let staged_records: &[N] = &staged_records;
-    let dmatrix = DMatrix::from_row_slice(num_records, feature_count, staged_records);
-
-    Ok(dmatrix)
+    Ok((staged_records, num_records))
 }

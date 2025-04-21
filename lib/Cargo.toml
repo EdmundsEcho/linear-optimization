@@ -3,6 +3,7 @@ name = "propensity-score"
 version = "0.1.0"
 authors = ["Edmund Cape <edmund.cape@gmail.com>"]
 edition = "2021"
+description = "Provides the propensity score capability for the tnc-analysis app"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

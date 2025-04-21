@@ -43,10 +43,15 @@ impl<'a> Objective {
     pub fn new(x: DMatrix<f64>, y: DVector<f64>) -> Self {
         Objective { x, y }
     }
+    ///
+    /// csv -> DMatrix<f64> with placeholder for intercept
+    ///
     pub fn from_csv<P: AsRef<Path>>(path: P, with_headers: bool) -> Result<Self> {
-        // csv -> DMatrix<f64> with placeholder for intercept
-        let matrix: DMatrix<f64> = matrix_csv::from_csv(path, with_headers)?;
-        Ok(matrix.into())
+        let (staged_records, num_records) = matrix_csv::from_csv(path, with_headers)?;
+        let feature_count = staged_records.len() / num_records;
+        let dmatrix =
+            DMatrix::from_row_slice(num_records, feature_count, staged_records.as_slice());
+        Ok(dmatrix.into())
     }
     /// The data has target in the first slot, and bias/intercept in the last slot
     pub fn from_vec(data: Vec<f64>, rows: usize) -> Result<Self> {

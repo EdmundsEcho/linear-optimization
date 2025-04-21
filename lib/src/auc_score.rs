@@ -4,6 +4,7 @@ use num_traits::Float;
 use std::fmt::Display;
 use std::iter::zip;
 use std::ops::AddAssign;
+use tracing::{event, Level};
 
 // assess if the value is zero
 #[derive(Debug)]
@@ -23,19 +24,27 @@ where
         neg: T::zero(),
     };
 
+    let mut warn_msg: &str = "";
     y_true.iter().fold(&mut counts, |acc, yi| {
         if yi == &T::zero() {
             acc.neg += T::one();
         } else if yi == &T::one() {
             acc.pos += T::one();
+        } else if yi > &T::one() {
+            acc.pos += T::one();
+            warn_msg = "🟡 Found at least one non-binary value.";
         } else {
             panic!(
-                "AUC is only for binary classification. Invalid label: {}",
+                "binary quality score (auc): only for binary classification. Invalid label: {}",
                 yi
             );
         }
         acc
     });
+
+    if !warn_msg.is_empty() {
+        event!(Level::INFO, "{}", &warn_msg);
+    }
 
     let auc: usize = zip(y_true.iter(), y_hat.iter())
         .filter(|(yi_true, yi_hat)| yi_true == yi_hat)
